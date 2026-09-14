@@ -27,6 +27,7 @@ const claimSchema = new mongoose.Schema(
         min: 0,
     },
     status: {
+        type: String,
         enum: ["submitted", "under-review", "approved", "denied", "closed"],
         default: "submitted"
     },
