@@ -7,7 +7,7 @@ import mongoose from "mongoose";
  * - Mongoose CastError (invalid ObjectId) => 400
  * - Fallback => 500
  */
-export function handleApiErrors(
+function handleApiErrors(
   err: unknown,
   req: Request,
   res: Response,
@@ -37,3 +37,5 @@ export function handleApiErrors(
     message: "Something went wrong. Please try again later.",
   });
 }
+
+export default handleApiErrors
