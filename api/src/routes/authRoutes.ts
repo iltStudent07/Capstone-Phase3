@@ -1,8 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
 import jwt, { SignOptions } from "jsonwebtoken";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
 import User from "../models/User.js";
 import authenticate from "../middleware/auth.js";
+import handleValidationErrors from "../middleware/handleValidationErrors.js"
 
 const router = express.Router();
 
@@ -25,14 +26,6 @@ const loginValidation = [
     .withMessage("Valid email is required"),
   body("password").notEmpty().withMessage("Password is required"),
 ];
-
-function handleValidationErrors(req: Request, res: Response, next: NextFunction) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  next();
-}
 
 // POST /api/auth/register
 router.post("/register",
