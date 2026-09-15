@@ -3,8 +3,11 @@ import express from 'express'
 import User from '../models/User.js'
 import Claim from '../models/Claim.js'
 import Policy from '../models/Policy.js'
+import authenticate from '../middleware/auth.js'
 
 const router = express.Router();
+
+router.use(authenticate)
 
 router.get('/api/dashboard', async (req, res) => {
   try {

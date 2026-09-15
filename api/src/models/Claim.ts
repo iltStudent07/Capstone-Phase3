@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Counter from "./Counter";
-import Note from "./Note"
+import Counter from "./Counter.js";
+import Note from "./Note.js"
 
 const claimSchema = new mongoose.Schema(
   {
