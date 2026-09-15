@@ -54,9 +54,9 @@ claimSchema.pre("save", async function () {
     { name: "claimNumber" },
     {
       $inc: { seq: 1 },
-      $setOnInsert: { name: "claimNumber", seq: 0 },
+      $setOnInsert: { name: "claimNumber" },
     },
-    { new: true, upsert: true }
+    { returnDocument: "after", upsert: true }
   );
 
   this.claimNumber = `CLM-${String(counter.seq).padStart(4, "0")}`;

@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
 import User from './models/User';
 import Policy from './models/Policy';
 import Claim from './models/Claim';
@@ -209,6 +208,18 @@ const seedDatabase = async () => {
       },
     ]);
     console.log(`Created ${claims.length} claims`);
+
+    await Counter.findOneAndUpdate(
+      { name: 'claimNumber' },
+      {
+        $set: {
+          name: 'claimNumber',
+          seq: claims.length,
+        },
+      },
+      { upsert: true },
+    );
+    console.log(`Synchronized claim counter to ${claims.length}`);
 
     console.log('Database seeded successfully!');
     process.exit(0);

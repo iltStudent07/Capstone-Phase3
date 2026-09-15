@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.use(authenticate)
 
-router.get('/api/dashboard', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const [
       totalClaims,

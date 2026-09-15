@@ -16,13 +16,13 @@ app.use(express.json())
 // Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/claims', claimRoutes)
-app.use('/api/policy', policyRoutes)
+app.use('/api/policies', policyRoutes)
 
 //Dashboard Route
-app.get('api/dashboard', dashboardRoute)
+app.use('/api/dashboard', dashboardRoute)
 
 // Health Check
-app.get('api/health', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.json({ status: "ok" })
 });
 
