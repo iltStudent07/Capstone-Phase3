@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import NotFound from './pages/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
+import Dashboard from './pages/Dashboard'
 import './App.css'
 
 function App() {
@@ -14,7 +15,9 @@ function App() {
       <AuthProvider>
         <main>
           <Routes>
-            <Route element={<ProtectedRoute />}/>
+            <Route path='/' element={<ProtectedRoute />}>
+              <Route index element={<Dashboard />} />
+            </Route>
             <Route path='/login' element={<Login />} />
             <Route path='register' element={<Register />} />
             <Route path='*' element={<NotFound />} />

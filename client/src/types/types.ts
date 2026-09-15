@@ -30,12 +30,18 @@ export type Claim = {
 
 export type DashboardStats = {
     totalClaims: number
-    claimsByStatus: number
+    claimsByStatus: {
+        underReview: number
+        approved: number
+        submitted: number
+        denied: number
+        closed: number
+    }
     totalPolicies: number
     policiesByType: number
     totalUsers: number
     recentClaims: number
-    claimAmountAgg: number
+    totalClaimAmount: number
 }
 
 export type AuthContextValue = {
