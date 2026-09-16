@@ -7,6 +7,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Dashboard from './pages/Dashboard'
 import ClaimsList from './pages/ClaimsList'
 import ClaimsDetail from './pages/ClaimsDetail'
+import Policy from './pages/Policy'
 import './App.css'
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/claims' element={<ClaimsList />} />
               <Route path='/claims/:id' element={<ClaimsDetail />} />
+              <Route path='/policies' element={<Policy />} />
             </Route>
             <Route path='/login' element={<Login />} />
             <Route path='register' element={<Register />} />

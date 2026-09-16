@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import api from '../services/api'
 import type { DashboardStats } from '../types/types'
+import { Link } from 'react-router-dom'
 
 
 function Dashboard() {
@@ -85,6 +86,7 @@ function Dashboard() {
   return (
     <div>
       <h1>Dashboard</h1>
+      {/* Top 4 boxes on top of screen */}
       <div style={{ display: 'flex', justifyContent: 'space-evenly'}}>
         <div style={{ padding: '25px', border: '1px solid black'}}>Total Claims: {data?.totalClaims ?? 0}</div>
         <div style={{ padding: '25px', border: '1px solid black'}}>Total Policies: {data?.totalPolicies ?? 0}</div>
@@ -93,6 +95,7 @@ function Dashboard() {
       </div>
 
       <div>
+        {/* Claims by Status section */}
         <div style={{ marginTop: '2rem', maxWidth: '700px', border: '1px solid black'}}>
         <h2>Claims by Status</h2>
 
@@ -136,6 +139,7 @@ function Dashboard() {
           )
         })}  
         </div>
+        {/* Recent Claims section*/}
         <div style={{ padding: '25px', border: '1px solid black', marginTop: '2rem'}}>
             <h2>Recent Claims</h2>
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
@@ -151,7 +155,7 @@ function Dashboard() {
                 {recentClaims.length > 0 ? (
                   recentClaims.map((claim) => (
                     <tr key={claim._id}>
-                      <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{claim.claimNumber}</td>
+                      <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}><Link to={`/claims/${claim._id}`}>{claim.claimNumber}</Link></td>
                       <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{claim.policy?.policyNumber ?? '—'}</td>
                       <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{formatCurrency(claim.amount ?? 0)}</td>
                       <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{claim.status}</td>

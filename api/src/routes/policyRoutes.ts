@@ -10,14 +10,6 @@ const router = express.Router();
 router.use(authenticate);
 
 const createPolicyValidation = [
-    body("policyNumber")
-        .trim()
-        .notEmpty()
-        .withMessage("policyNumber is required")
-        .isString()
-        .withMessage("policyNumber must be a string")
-        .toUpperCase(),
-
     body("holderName")
         .trim()
         .notEmpty()
@@ -26,7 +18,8 @@ const createPolicyValidation = [
         .withMessage("holderName must be a string"),
 
     body("type")
-        .optional()
+        .notEmpty()
+        .withMessage("type is required")
         .isIn(["auto", "home", "life"])
         .withMessage("type must be one of: auto, home, life"),
 
@@ -44,13 +37,6 @@ const createPolicyValidation = [
 ];
 
 const updatePolicyValidation = [
-    body("policyNumber")
-        .optional()
-        .trim()
-        .isString()
-        .withMessage("policyNumber must be a string")
-        .toUpperCase(),
-
     body("holderName")
         .optional()
         .trim()
@@ -165,8 +151,10 @@ router.get("/:id", idValidation, handleValidationErrors, async (req: Request, re
 // POST /api/policies - Create policy (owner = authenticated user)
 router.post("/", createPolicyValidation, handleValidationErrors, async (req: Request, res: Response) => {
     try {
+        const { policyNumber: _policyNumber, ...policyPayload } = req.body;
+
         const policy = await Policy.create({
-            ...req.body,
+            ...policyPayload,
             owner: (req as any).user._id,
         });
 
@@ -187,9 +175,11 @@ router.put(
     handleValidationErrors,
     async (req: Request, res: Response) => {
         try {
+            const { policyNumber: _policyNumber, ...updates } = req.body;
+
             const updated = await Policy.findOneAndUpdate(
                 { _id: req.params.id, owner: (req as any).user._id },
-                req.body,
+                updates,
                 { new: true, runValidators: true }
             );
 

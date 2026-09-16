@@ -225,11 +225,16 @@ router.get("/stats", async (req: Request, res: Response) => {
 });
 
 // GET /api/claims/:id - Get single claim by ID
-const getClaimAccessFilter = (req: Request, claimId: string) => {
+const normalizeRouteParam = (value: string | string[]) => (
+    Array.isArray(value) ? value[0] : value
+);
+
+const getClaimAccessFilter = (req: Request, claimId: string | string[]) => {
     const currentUserId = (req as any).user._id;
     const currentUserRole = String((req as any).user.role || "").toLowerCase();
+    const normalizedClaimId = normalizeRouteParam(claimId);
 
-    const filter: any = { _id: claimId };
+    const filter: any = { _id: normalizedClaimId };
 
     if (currentUserRole !== "admin") {
         filter.assignedTo = currentUserId;
