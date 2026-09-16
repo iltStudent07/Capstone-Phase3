@@ -13,9 +13,11 @@ function Register() {
     const { register } = useAuth()
 
     return (
-        <div>
+        <div className="auth-page">
+            <div className="section-panel section-panel--padded auth-card">
             <h1>Register</h1>
              <form
+                className="auth-form"
                 onSubmit={async e=>{e.preventDefault()
                     try {
                         await register(name, email, password, role)
@@ -24,21 +26,22 @@ function Register() {
                         setError("There was an error registering User")
                     }
                 }}>
-                <input type='name' value={name} onChange={e=>setName(e.target.value)} placeholder="Name"/>
+                <input className="form-control" type='name' value={name} onChange={e=>setName(e.target.value)} placeholder="Name"/>
 
-                <input type='email' value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email"/>
+                <input className="form-control" type='email' value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email"/>
 
-                <input type='password' value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password"/>
+                <input className="form-control" type='password' value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password"/>
 
-                <select value={role} onChange={e=>setRole(e.target.value)}>
+                <select className="form-control" value={role} onChange={e=>setRole(e.target.value)}>
                     <option value="adjuster">Adjuster</option>
                     <option value="admin">Admin</option>
                 </select>
 
-                <button>Login</button>
+                <button className="app-button auth-submit">Register</button>
             </form>
 
-            {error&&<p className="error">{error}</p>}
+            {error&&<p className="form-error">{error}</p>}
+            </div>
         </div>
     )
 }

@@ -11,9 +11,11 @@ function Login() {
     const { login } = useAuth()
 
     return (
-        <div>
+        <div className="auth-page">
+            <div className="section-panel section-panel--padded auth-card">
             <h1>Sign In</h1>
             <form
+                className="auth-form"
                 onSubmit={async e=>{e.preventDefault()
                     try {
                         await login(email, password)
@@ -22,16 +24,17 @@ function Login() {
                         setError("Email or Password is incorrect")
                     }
                 }}>
-                <input type='email' value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email"/>
+                <input className="form-control" type='email' value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email"/>
 
-                <input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password"/>
+                <input className="form-control" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Password"/>
 
-                <button>Login</button>
+                <button className="app-button auth-submit">Login</button>
             </form>
 
-            {error&&<p className="error">{error}</p>}
+            {error&&<p className="form-error">{error}</p>}
 
-            <p>Need to register? <Link to='/register'>Click Here!</Link></p>
+            <p className="auth-link">Need to register? <Link to='/register'>Click Here!</Link></p>
+            </div>
         </div>
     )
 }

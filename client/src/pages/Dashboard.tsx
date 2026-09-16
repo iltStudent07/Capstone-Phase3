@@ -56,26 +56,32 @@ function Dashboard() {
   const claimsByStatus = [
     {
       status: 'Under Review',
+      statusKey: 'under-review',
       count: claimsByStatusCounts.underReview,
     },
     {
       status: 'Approved',
+      statusKey: 'approved',
       count: claimsByStatusCounts.approved,
     },
     {
       status: 'Submitted',
+      statusKey: 'submitted',
       count: claimsByStatusCounts.submitted,
     },
     {
       status: 'Denied',
+      statusKey: 'denied',
       count: claimsByStatusCounts.denied,
     },
     {
       status: 'Closed',
+      statusKey: 'closed',
       count: claimsByStatusCounts.closed,
     },
   ]
   const recentClaims = data?.recentClaims ?? []
+  const totalClaims = data?.totalClaims ?? 0
 
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat('en-US', {
@@ -83,87 +89,66 @@ function Dashboard() {
       currency: 'USD',
     }).format(amount)
 
-  return (
-    <div>
-      <h1>Dashboard</h1>
+    return (
+    <div className="dashboard-page">
+      <h1 className="dashboard-title">Dashboard</h1>
       {/* Top 4 boxes on top of screen */}
-      <div style={{ display: 'flex', justifyContent: 'space-evenly'}}>
-        <div style={{ padding: '25px', border: '1px solid black'}}>Total Claims: {data?.totalClaims ?? 0}</div>
-        <div style={{ padding: '25px', border: '1px solid black'}}>Total Policies: {data?.totalPolicies ?? 0}</div>
-        <div style={{ padding: '25px', border: '1px solid black'}}>Total Users: <strong>{data?.totalUsers ?? 0}</strong></div>
-        <div style={{ padding: '25px', border: '1px solid black'}}>Total Claim Amount: <strong>{formatCurrency(data?.totalClaimAmount ?? 0)}</strong></div> 
+      <div className="dashboard-stats">
+        <div className="section-panel section-panel--padded dashboard-stat-card">Total Claims: <strong className="dashboard-stat-value">{data?.totalClaims ?? 0}</strong></div>
+        <div className="section-panel section-panel--padded dashboard-stat-card">Total Policies: <strong className="dashboard-stat-value">{data?.totalPolicies ?? 0}</strong></div>
+        <div className="section-panel section-panel--padded dashboard-stat-card">Total Users: <strong className="dashboard-stat-value">{data?.totalUsers ?? 0}</strong></div>
+        <div className="section-panel section-panel--padded dashboard-stat-card">Total Claim Amount: <strong className="dashboard-stat-value">{formatCurrency(data?.totalClaimAmount ?? 0)}</strong></div> 
       </div>
 
-      <div>
+      <div className="dashboard-main-grid">
         {/* Claims by Status section */}
-        <div style={{ marginTop: '2rem', maxWidth: '700px', border: '1px solid black'}}>
+        <div className="section-panel section-panel--padded dashboard-panel">
         <h2>Claims by Status</h2>
 
         {claimsByStatus.map((item) => {
-          const maxCount = Math.max(...claimsByStatus.map((s) => s.count), 1)
-          const barWidth = `${(item.count / maxCount) * 50}%`
+          const barWidth = totalClaims > 0 ? `${(item.count / totalClaims) * 100}%` : '0%'
 
           return (
-            <div
-              key={item.status}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                marginBottom: '10px',
-              }}
-            >
-              <div style={{ width: '120px', textAlign: 'left' }}>{item.status}</div>
+            <div key={item.status} className="dashboard-status-row">
+              <div className={`status-pill dashboard-status-pill dashboard-status--${item.statusKey}`}>{item.status}</div>
 
-              <div
-                style={{
-                  flex: 1,
-                  height: '10px',
-                  backgroundColor: '#e5e7eb',
-                  borderRadius: '999px',
-                  overflow: 'hidden',
-                }}
-              >
+              <div className={`dashboard-status-track dashboard-status-track--${item.statusKey}`}>
                 <div
-                  style={{
-                    width: barWidth,
-                    height: '100%',
-                    backgroundColor: '#3b82f6',
-                    borderRadius: '999px',
-                  }}
+                  className={`dashboard-status-fill dashboard-status-fill--${item.statusKey}`}
+                  style={{ width: barWidth }}
                 />
               </div>
 
-              <div style={{ width: '30px', textAlign: 'right' }}>{item.count}</div>
+              <div className="dashboard-status-count">{item.count}</div>
             </div>
           )
         })}  
         </div>
         {/* Recent Claims section*/}
-        <div style={{ padding: '25px', border: '1px solid black', marginTop: '2rem'}}>
+        <div className="section-panel section-panel--padded dashboard-panel">
             <h2>Recent Claims</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
+            <table className="app-table dashboard-table">
               <thead>
                 <tr>
-                  <th style={{ textAlign: 'left', padding: '0.75rem', borderBottom: '1px solid #d1d5db' }}>Claim #</th>
-                  <th style={{ textAlign: 'left', padding: '0.75rem', borderBottom: '1px solid #d1d5db' }}>Policy</th>
-                  <th style={{ textAlign: 'left', padding: '0.75rem', borderBottom: '1px solid #d1d5db' }}>Amount</th>
-                  <th style={{ textAlign: 'left', padding: '0.75rem', borderBottom: '1px solid #d1d5db' }}>Status</th>
+                  <th>Claim #</th>
+                  <th>Policy</th>
+                  <th>Amount</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
                 {recentClaims.length > 0 ? (
                   recentClaims.map((claim) => (
                     <tr key={claim._id}>
-                      <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}><Link to={`/claims/${claim._id}`}>{claim.claimNumber}</Link></td>
-                      <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{claim.policy?.policyNumber ?? '—'}</td>
-                      <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{formatCurrency(claim.amount ?? 0)}</td>
-                      <td style={{ padding: '0.75rem', borderBottom: '1px solid #e5e7eb' }}>{claim.status}</td>
+                      <td><Link className="claim-link" to={`/claims/${claim._id}`}>{claim.claimNumber}</Link></td>
+                      <td>{claim.policy?.policyNumber ?? '—'}</td>
+                      <td>{formatCurrency(claim.amount ?? 0)}</td>
+                      <td>{claim.status}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={4} style={{ padding: '0.75rem' }}>No recent claims found.</td>
+                    <td colSpan={4}>No recent claims found.</td>
                   </tr>
                 )}
               </tbody>

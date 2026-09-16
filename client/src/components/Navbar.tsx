@@ -2,35 +2,29 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'
 
 function Navbar() {
-  const linkStyle = ({ isActive }: { isActive: boolean }) => ({
-    color: isActive ? '#2574A9' : '#333',
-    fontWeight: isActive ? 'bold' as const : 'normal' as const,
-    textDecoration: 'none',
-    padding: '8px 16px',
-  });
+  const linkClassName = ({ isActive }: { isActive: boolean }) =>
+    `nav-link${isActive ? ' nav-link--active' : ''}`
 
   const { user, logout } = useAuth()
 
   return (
     <div>
-       <nav style={{
-            display: 'flex',
-            gap: '8px',
-            padding: '16px',
-            backgroundColor: '#f4f6f9',
-            borderBottom: '2px solid #ddd',
-            }}>
-            <NavLink to="/dashboard" style={linkStyle}>Dashboard</NavLink>
-            <NavLink to="/claims" style={linkStyle}>Claims</NavLink>
-            <NavLink to="/policies" style={linkStyle}>Policies</NavLink>
+       <nav className="navbar">
+            <div className="navbar__links">
+              <NavLink to="/dashboard" className={linkClassName}>Dashboard</NavLink>
+              <NavLink to="/claims" className={linkClassName}>Claims</NavLink>
+              <NavLink to="/policies" className={linkClassName}>Policies</NavLink>
+            </div>
 
-            {user && (
-              <>
-                <span>{user.name}</span>
-                <span>{user.role}</span>
-              </>
-            )}
-            <button onClick={logout}>Logout</button> 
+            <div className="navbar__meta">
+              {user && (
+                <>
+                  <span className="navbar__user">{user.name}</span>
+                  <span className={`status-pill role-status--${user.role} navbar__user`}>{user.role}</span>
+                </>
+              )}
+              <button onClick={logout} className="app-button navbar__logout">Logout</button>
+            </div>
         </nav>
 
         

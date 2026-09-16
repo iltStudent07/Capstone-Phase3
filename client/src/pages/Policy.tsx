@@ -188,95 +188,47 @@ function Policy() {
         }
     }
 
-    const getStatusColor = (status: string) => {
-        const colors: Record<string, string> = {
-            active: '#34d399',
-            expired: '#f87171',
-            cancelled: '#9ca3af',
-        }
-
-        return colors[status] || '#6b7280'
-    }
-
     return (
-        <div style={{ padding: '2rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                <h1>Policies</h1>
+        <div className="policy-page">
+            <div className="page-header">
+                <h1 className="page-header__title">Policies</h1>
                 <button
                     onClick={() => setShowForm(!showForm)}
-                    style={{
-                        padding: '0.75rem 1.5rem',
-                        backgroundColor: '#3b82f6',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '0.5rem',
-                        cursor: 'pointer',
-                        fontSize: '1rem',
-                    }}
+                    className="app-button page-header__action"
                 >
                     {showForm ? 'Cancel' : 'New Policy'}
                 </button>
             </div>
 
             {showForm && (
-                <div style={{ marginBottom: '2rem', padding: '1.5rem', backgroundColor: '#f9fafb', borderRadius: '0.5rem', border: '1px solid #e5e7eb' }}>
+                <div className="section-panel section-panel--padded form-card">
                     <h2>Create New Policy</h2>
                     <form onSubmit={handleSubmitPolicy}>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                        <div className="form-grid form-grid--two">
                             <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                                    Holder Name <span style={{ color: 'red' }}>*</span>
+                                <label className="form-label">
+                                    Holder Name <span className="form-required">*</span>
                                 </label>
                                 <input
                                     type="text"
                                     value={formData.holderName}
                                     onChange={(e) => handleFormChange('holderName', e.target.value)}
                                     placeholder="Policy holder"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        border: '1px solid #d1d5db',
-                                        borderRadius: '0.375rem',
-                                        fontSize: '1rem',
-                                        boxSizing: 'border-box',
-                                    }}
+                                    className="form-control"
                                 />
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                                    Generated Policy Number
-                                </label>
-                                <div
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        border: '1px solid #d1d5db',
-                                        borderRadius: '0.375rem',
-                                        fontSize: '1rem',
-                                        boxSizing: 'border-box',
-                                        backgroundColor: '#f3f4f6',
-                                        color: '#374151',
-                                    }}
-                                >
-                                    {generatedPolicyPreview}
-                                </div>
+                                <label className="form-label">Generated Policy Number</label>
+                                <div className="policy-preview">{generatedPolicyPreview}</div>
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                                    Type
-                                </label>
+                                <label className="form-label">Type</label>
                                 <select
                                     value={formData.type}
                                     onChange={(e) => handleFormChange('type', e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        border: '1px solid #d1d5db',
-                                        borderRadius: '0.375rem',
-                                        fontSize: '1rem',
-                                    }}
+                                    className="form-control"
                                 >
                                     <option value="auto">Auto</option>
                                     <option value="home">Home</option>
@@ -285,9 +237,7 @@ function Policy() {
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                                    Premium
-                                </label>
+                                <label className="form-label">Premium</label>
                                 <input
                                     type="number"
                                     min="0"
@@ -295,31 +245,16 @@ function Policy() {
                                     value={formData.premium}
                                     onChange={(e) => handleFormChange('premium', e.target.value)}
                                     placeholder="0.00"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        border: '1px solid #d1d5db',
-                                        borderRadius: '0.375rem',
-                                        fontSize: '1rem',
-                                        boxSizing: 'border-box',
-                                    }}
+                                    className="form-control"
                                 />
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                                    Status
-                                </label>
+                                <label className="form-label">Status</label>
                                 <select
                                     value={formData.status}
                                     onChange={(e) => handleFormChange('status', e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        border: '1px solid #d1d5db',
-                                        borderRadius: '0.375rem',
-                                        fontSize: '1rem',
-                                    }}
+                                    className="form-control"
                                 >
                                     <option value="active">Active</option>
                                     <option value="expired">Expired</option>
@@ -328,60 +263,32 @@ function Policy() {
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                                    Effective Date
-                                </label>
+                                <label className="form-label">Effective Date</label>
                                 <input
                                     type="date"
                                     value={formData.effectiveDate}
                                     onChange={(e) => handleFormChange('effectiveDate', e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        border: '1px solid #d1d5db',
-                                        borderRadius: '0.375rem',
-                                        fontSize: '1rem',
-                                        boxSizing: 'border-box',
-                                    }}
+                                    className="form-control"
                                 />
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                                    Expiration Date
-                                </label>
+                                <label className="form-label">Expiration Date</label>
                                 <input
                                     type="date"
                                     value={formData.expriationDate}
                                     onChange={(e) => handleFormChange('expriationDate', e.target.value)}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        border: '1px solid #d1d5db',
-                                        borderRadius: '0.375rem',
-                                        fontSize: '1rem',
-                                        boxSizing: 'border-box',
-                                    }}
+                                    className="form-control"
                                 />
                             </div>
                         </div>
 
-                        {formError && (
-                            <p style={{ color: '#dc2626', marginBottom: '1rem' }}>{formError}</p>
-                        )}
+                        {formError && <p className="form-error">{formError}</p>}
 
                         <button
                             type="submit"
                             disabled={formLoading}
-                            style={{
-                                padding: '0.75rem 1.5rem',
-                                backgroundColor: formLoading ? '#9ca3af' : '#10b981',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '0.375rem',
-                                cursor: formLoading ? 'not-allowed' : 'pointer',
-                                fontSize: '1rem',
-                            }}
+                            className="app-button app-button--primary"
                         >
                             {formLoading ? 'Creating...' : 'Create Policy'}
                         </button>
@@ -389,40 +296,24 @@ function Policy() {
                 </div>
             )}
 
-            <div style={{ marginBottom: '2rem', display: 'flex', gap: '1rem' }}>
-                <div style={{ flex: 1 }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                        Search
-                    </label>
+            <div className="filter-row">
+                <div className="filter-group">
+                    <label className="form-label">Search</label>
                     <input
                         type="text"
                         value={filters.search}
                         onChange={(e) => handleFilterChange('search', e.target.value)}
                         placeholder="Search by policy number or holder..."
-                        style={{
-                            width: '100%',
-                            padding: '0.75rem',
-                            border: '1px solid #d1d5db',
-                            borderRadius: '0.375rem',
-                            fontSize: '1rem',
-                        }}
+                        className="form-control"
                     />
                 </div>
 
-                <div style={{ minWidth: '200px' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                        Type Filter
-                    </label>
+                <div className="filter-group filter-group--narrow">
+                    <label className="form-label">Type Filter</label>
                     <select
                         value={filters.type}
                         onChange={(e) => handleFilterChange('type', e.target.value)}
-                        style={{
-                            width: '100%',
-                            padding: '0.75rem',
-                            border: '1px solid #d1d5db',
-                            borderRadius: '0.375rem',
-                            fontSize: '1rem',
-                        }}
+                        className="form-control"
                     >
                         <option value="">All Types</option>
                         <option value="auto">Auto</option>
@@ -432,63 +323,45 @@ function Policy() {
                 </div>
             </div>
 
-            {error && <p style={{ color: '#dc2626', marginBottom: '1rem' }}>{error}</p>}
+            {error && <p className="form-error">{error}</p>}
 
             {loading ? (
                 <p>Loading policies...</p>
             ) : (
                 <>
-                    <div style={{ overflowX: 'auto', marginBottom: '2rem' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <div className="table-wrap">
+                        <table className="app-table claims-table">
                             <thead>
-                                <tr style={{ backgroundColor: '#f3f4f6', borderBottom: '2px solid #d1d5db' }}>
-                                    <th style={{ textAlign: 'left', padding: '1rem', fontWeight: '600' }}>Policy Number</th>
-                                    <th style={{ textAlign: 'left', padding: '1rem', fontWeight: '600' }}>Holder</th>
-                                    <th style={{ textAlign: 'left', padding: '1rem', fontWeight: '600' }}>Type</th>
-                                    <th style={{ textAlign: 'left', padding: '1rem', fontWeight: '600' }}>Premium</th>
-                                    <th style={{ textAlign: 'left', padding: '1rem', fontWeight: '600' }}>Status</th>
-                                    <th style={{ textAlign: 'left', padding: '1rem', fontWeight: '600' }}>Effective Date</th>
-                                    <th style={{ textAlign: 'left', padding: '1rem', fontWeight: '600' }}>Expiration Date</th>
-                                    <th style={{ textAlign: 'left', padding: '1rem', fontWeight: '600' }}>Actions</th>
+                                <tr>
+                                    <th>Policy Number</th>
+                                    <th>Holder</th>
+                                    <th>Type</th>
+                                    <th>Premium</th>
+                                    <th>Status</th>
+                                    <th>Effective Date</th>
+                                    <th>Expiration Date</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {policies.length > 0 ? (
                                     policies.map((policy) => (
-                                        <tr key={policy._id} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                                            <td style={{ padding: '1rem' }}>{policy.policyNumber}</td>
-                                            <td style={{ padding: '1rem' }}>{policy.holderName}</td>
-                                            <td style={{ padding: '1rem', textTransform: 'capitalize' }}>{policy.type || '—'}</td>
-                                            <td style={{ padding: '1rem' }}>{formatCurrency(policy.premium)}</td>
-                                            <td style={{ padding: '1rem' }}>
-                                                <span
-                                                    style={{
-                                                        display: 'inline-block',
-                                                        padding: '0.375rem 0.75rem',
-                                                        backgroundColor: `${getStatusColor(policy.status)}20`,
-                                                        color: getStatusColor(policy.status),
-                                                        borderRadius: '0.375rem',
-                                                        fontSize: '0.875rem',
-                                                        fontWeight: '500',
-                                                    }}
-                                                >
+                                        <tr key={policy._id}>
+                                            <td>{policy.policyNumber}</td>
+                                            <td>{policy.holderName}</td>
+                                            <td className="policy-type">{policy.type || '—'}</td>
+                                            <td>{formatCurrency(policy.premium)}</td>
+                                            <td>
+                                                <span className={`status-pill policy-status--${policy.status || ''}`}>
                                                     {policy.status || '—'}
                                                 </span>
                                             </td>
-                                            <td style={{ padding: '1rem' }}>{formatDate(policy.effectiveDate)}</td>
-                                            <td style={{ padding: '1rem' }}>{formatDate(policy.expriationDate)}</td>
-                                            <td style={{ padding: '1rem' }}>
+                                            <td>{formatDate(policy.effectiveDate)}</td>
+                                            <td>{formatDate(policy.expriationDate)}</td>
+                                            <td>
                                                 <button
                                                     onClick={() => void handleDelete(policy._id)}
-                                                    style={{
-                                                        padding: '0.5rem 0.875rem',
-                                                        backgroundColor: '#ef4444',
-                                                        color: 'white',
-                                                        border: 'none',
-                                                        borderRadius: '0.375rem',
-                                                        cursor: 'pointer',
-                                                        fontSize: '0.875rem',
-                                                    }}
+                                                    className="app-button policy-button--danger"
                                                 >
                                                     Delete
                                                 </button>
@@ -497,7 +370,7 @@ function Policy() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan={8} style={{ padding: '1rem', textAlign: 'center', color: '#6b7280' }}>
+                                        <td colSpan={8} className="pagination-info">
                                             No policies found.
                                         </td>
                                     </tr>
@@ -506,31 +379,23 @@ function Policy() {
                         </table>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div style={{ color: '#6b7280' }}>
+                    <div className="pagination-bar">
+                        <div className="pagination-info">
                             Showing {policies.length > 0 ? (pagination.page - 1) * pagination.limit + 1 : 0} to{' '}
                             {Math.min(pagination.page * pagination.limit, pagination.total)} of {pagination.total} policies
                         </div>
 
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <div className="pagination-controls">
                             <button
                                 onClick={() => setPagination((prev) => ({ ...prev, page: prev.page - 1 }))}
                                 disabled={pagination.page === 1}
-                                style={{
-                                    padding: '0.5rem 1rem',
-                                    backgroundColor: '#e5e7eb',
-                                    color: pagination.page === 1 ? '#9ca3af' : '#374151',
-                                    border: '1px solid #d1d5db',
-                                    borderRadius: '0.375rem',
-                                    cursor: pagination.page === 1 ? 'not-allowed' : 'pointer',
-                                    fontSize: '0.875rem',
-                                }}
+                                className="app-button pagination-button"
                             >
                                 Previous
                             </button>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0 1rem' }}>
-                                <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                            <div className="pagination-controls__page">
+                                <span className="pagination-info">
                                     Page {pagination.page} of {pagination.totalPages || 1}
                                 </span>
                             </div>
@@ -538,15 +403,7 @@ function Policy() {
                             <button
                                 onClick={() => setPagination((prev) => ({ ...prev, page: prev.page + 1 }))}
                                 disabled={pagination.page >= pagination.totalPages}
-                                style={{
-                                    padding: '0.5rem 1rem',
-                                    backgroundColor: '#e5e7eb',
-                                    color: pagination.page >= pagination.totalPages ? '#9ca3af' : '#374151',
-                                    border: '1px solid #d1d5db',
-                                    borderRadius: '0.375rem',
-                                    cursor: pagination.page >= pagination.totalPages ? 'not-allowed' : 'pointer',
-                                    fontSize: '0.875rem',
-                                }}
+                                className="app-button pagination-button"
                             >
                                 Next
                             </button>

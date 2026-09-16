@@ -83,7 +83,7 @@ function ClaimDetail() {
 
     return (
         <div className="claim-detail-container">
-            <button onClick={() => nav('/claims')} className="back-button">← Back to Claims</button>
+            <button onClick={() => nav('/claims')} className="back-button app-button">← Back to Claims</button>
 
             {/* Claim Information */}
             <div className="claim-info">
@@ -107,7 +107,7 @@ function ClaimDetail() {
                         <option value="denied">Denied</option>
                         <option value="closed">Closed</option>
                     </select>
-                    <button onClick={handleStatusUpdate} disabled={updating}>
+                    <button onClick={handleStatusUpdate} disabled={updating} className="app-button">
                         {updating ? 'Updating...' : 'Update Status'}
                     </button>
                 </div>
@@ -148,7 +148,7 @@ function ClaimDetail() {
                         placeholder="Add a new note..."
                         rows={3}
                     />
-                    <button onClick={handleAddNote} disabled={!newNote.trim()}>
+                    <button onClick={handleAddNote} disabled={!newNote.trim()} className="app-button">
                         Add Note
                     </button>
                 </div>
@@ -156,7 +156,7 @@ function ClaimDetail() {
 
             {/* Delete Button */}
             <div className="actions">
-                <button onClick={handleDelete} className="delete-button">
+                <button onClick={handleDelete} className="app-button delete-button">
                     Delete Claim
                 </button>
             </div>
