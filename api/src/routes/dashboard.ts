@@ -34,8 +34,9 @@ router.get('/', async (req, res) => {
       Claim.find()
         .sort({ createdAt: -1 })
         .limit(5)
-        .populate('policy')
-        .populate('assignedTo', '-password'),
+        .select('claimNumber policy amount status createdAt')
+        .populate('policy', 'policyNumber')
+        .lean(),
       Claim.aggregate<{ totalClaimAmount: number }>([
         {
           $group: {
@@ -55,6 +56,7 @@ router.get('/', async (req, res) => {
       closed: 0,
     }
 
+    // Makes sure all claim types are grouped togther reguardless of the syntax (eg. underreview, Under_Review) 
     const normalizeStatus = (status: string) =>
       status.toLowerCase().replace(/[^a-z0-9]/g, '')
 

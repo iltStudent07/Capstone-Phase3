@@ -28,19 +28,35 @@ export type Claim = {
     notes: string[]
 }
 
+export type RecentClaim = {
+    _id: string
+    claimNumber: string
+    policy: {
+        _id: string
+        policyNumber: string
+    }
+    amount: number
+    status: string
+}
+
 export type DashboardStats = {
     totalClaims: number
-    claimsByStatus: {
-        underReview: number
-        approved: number
-        submitted: number
-        denied: number
-        closed: number
-    }
+    claimsByStatus:
+        | {
+            underReview: number
+            approved: number
+            submitted: number
+            denied: number
+            closed: number
+        }
+        | {
+            status: string
+            count: number
+        }[]
     totalPolicies: number
     policiesByType: number
     totalUsers: number
-    recentClaims: number
+    recentClaims: RecentClaim[]
     totalClaimAmount: number
 }
 
