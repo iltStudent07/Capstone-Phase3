@@ -5,7 +5,7 @@ function NotFound() {
     <div>
       <h1>404 — Page Not Found</h1>
       <p>The page you're looking for is in another castle.</p>
-      <Link to="/">Go Home</Link>
+      <Link to="/dashboard">Back to Dashboard</Link>
     </div>
   );
 }

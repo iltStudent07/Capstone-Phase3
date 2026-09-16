@@ -5,6 +5,12 @@ export type User = {
     role: string
 }
 
+export type Note = {
+    text: string
+    createdAt: string
+    createdBy?: User | string | null
+}
+
 export type Policy = {
     _id: string
     policyNumber: string
@@ -19,13 +25,15 @@ export type Policy = {
 export type Claim = {
     _id: string
     claimNumber: string
-    policy: string
+    policy: string | Pick<Policy, '_id' | 'policyNumber' | 'holderName'>
     description: string
     incidentDate: string
     amount: number
     status: string
-    assignedTo: string
-    notes: string[]
+    assignedTo: string | User
+    notes: Note[]
+    createdAt?: string
+    updatedAt?: string
 }
 
 export type RecentClaim = {

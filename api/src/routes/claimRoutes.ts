@@ -225,21 +225,27 @@ router.get("/stats", async (req: Request, res: Response) => {
 });
 
 // GET /api/claims/:id - Get single claim by ID
+const getClaimAccessFilter = (req: Request, claimId: string) => {
+    const currentUserId = (req as any).user._id;
+    const currentUserRole = String((req as any).user.role || "").toLowerCase();
+
+    const filter: any = { _id: claimId };
+
+    if (currentUserRole !== "admin") {
+        filter.assignedTo = currentUserId;
+    }
+
+    return filter;
+};
+
 router.get("/:id", idValidation, handleValidationErrors, async (req: Request, res: Response) => {
     try {
-        const currentUserId = (req as any).user._id;
-        const currentUserRole = (req as any).user.role;
-        
-        const filter: any = { _id: req.params.id };
-        
-        // If not admin, only allow viewing own claims
-        if (currentUserRole !== "admin") {
-            filter.assignedTo = currentUserId;
-        }
+        const filter = getClaimAccessFilter(req, req.params.id);
 
         const claim = await Claim.findOne(filter)
             .populate("policy")
-            .populate("assignedTo", "-password");
+            .populate("assignedTo", "-password")
+            .populate("notes.createdBy", "-password");
 
         if (!claim) {
             return res.status(404).json({ message: "Claim not found" });
@@ -276,13 +282,16 @@ router.put(
     handleValidationErrors,
     async (req: Request, res: Response) => {
         try {
+            const filter = getClaimAccessFilter(req, req.params.id);
+
             const updated = await Claim.findOneAndUpdate(
-                { _id: req.params.id, assignedTo: (req as any).user._id },
+                filter,
                 req.body,
                 { new: true, runValidators: true }
             )
                 .populate("policy")
-                .populate("assignedTo", "-password");
+                .populate("assignedTo", "-password")
+                .populate("notes.createdBy", "-password");
 
             if (!updated) {
                 return res.status(404).json({ message: "Claim not found" });
@@ -306,28 +315,35 @@ router.post(
     handleValidationErrors,
     async (req: Request, res: Response) => {
         try {
-            const updated = await Claim.findOneAndUpdate(
-                { _id: req.params.id, assignedTo: (req as any).user._id },
+            const currentUserId = (req as any).user._id;
+            const filter = getClaimAccessFilter(req, req.params.id);
+
+            const updatedClaim = await Claim.findOneAndUpdate(
+                filter,
                 {
                     $push: {
                         notes: {
                             text: req.body.text,
-                            createdBy: (req as any).user._id,
+                            createdBy: currentUserId,
                             createdAt: new Date(),
                         },
                     },
                 },
                 { new: true, runValidators: true }
-            )
-                .populate("policy")
-                .populate("assignedTo", "-password");
+            );
 
-            if (!updated) {
+            if (!updatedClaim) {
                 return res.status(404).json({ message: "Claim not found" });
             }
 
-            return res.status(200).json(updated);
+            const populatedClaim = await Claim.findById(updatedClaim._id)
+                .populate("policy")
+                .populate("assignedTo", "-password")
+                .populate("notes.createdBy", "-password");
+
+            return res.status(200).json(populatedClaim);
         } catch (error) {
+            console.error("Failed to add note:", error);
             return res.status(500).json({ message: "Failed to add note" });
         }
     }
@@ -336,10 +352,9 @@ router.post(
 // DELETE /api/claims/:id - Delete claim
 router.delete("/:id", idValidation, handleValidationErrors, async (req: Request, res: Response) => {
     try {
-        const deleted = await Claim.findOneAndDelete({
-            _id: req.params.id,
-            assignedTo: (req as any).user._id,
-        });
+        const filter = getClaimAccessFilter(req, req.params.id);
+
+        const deleted = await Claim.findOneAndDelete(filter);
 
         if (!deleted) {
             return res.status(404).json({ message: "Claim not found" });

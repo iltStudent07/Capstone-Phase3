@@ -20,12 +20,16 @@ function Navbar() {
             backgroundColor: '#f4f6f9',
             borderBottom: '2px solid #ddd',
             }}>
-            <NavLink to="/" style={linkStyle}>Home</NavLink>
+            <NavLink to="/dashboard" style={linkStyle}>Dashboard</NavLink>
             <NavLink to="/claims" style={linkStyle}>Claims</NavLink>
             <NavLink to="/policies" style={linkStyle}>Policies</NavLink>
 
-            {user.name}
-            {user.role}
+            {user && (
+              <>
+                <span>{user.name}</span>
+                <span>{user.role}</span>
+              </>
+            )}
             <button onClick={logout}>Logout</button> 
         </nav>
 

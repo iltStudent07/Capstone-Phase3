@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import api from '../services/api'
 import type { Claim, Policy } from '../types/types'
+import { Link } from 'react-router-dom'
 
 interface PaginationData {
   page: number
@@ -100,7 +101,7 @@ function ClaimsList() {
     setFormData((prev) => ({ ...prev, [key]: value }))
   }
 
-  const handleSubmitClaim = async (e: React.FormEvent) => {
+  const handleSubmitClaim = async (e: React.SubmitEvent) => {
     e.preventDefault()
     setFormError(null)
     setFormLoading(true)
@@ -391,7 +392,7 @@ function ClaimsList() {
                 {claims.length > 0 ? (
                   claims.map((claim) => (
                     <tr key={claim._id} style={{ borderBottom: '1px solid #e5e7eb' }}>
-                      <td style={{ padding: '1rem' }}>{claim.claimNumber}</td>
+                      <td style={{ padding: '1rem' }}><Link to={`/claims/${claim._id}`}>{claim.claimNumber}</Link></td>
                       <td style={{ padding: '1rem' }}>
                         {typeof claim.policy === 'string'
                           ? claim.policy

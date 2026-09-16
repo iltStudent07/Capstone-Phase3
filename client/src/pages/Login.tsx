@@ -17,7 +17,7 @@ function Login() {
                 onSubmit={async e=>{e.preventDefault()
                     try {
                         await login(email, password)
-                        nav('/')
+                        nav('/dashboard')
                     } catch {
                         setError("Email or Password is incorrect")
                     }

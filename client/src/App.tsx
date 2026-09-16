@@ -6,6 +6,7 @@ import NotFound from './pages/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
 import Dashboard from './pages/Dashboard'
 import ClaimsList from './pages/ClaimsList'
+import ClaimsDetail from './pages/ClaimsDetail'
 import './App.css'
 
 function App() {
@@ -16,9 +17,10 @@ function App() {
       <AuthProvider>
         <main>
           <Routes>
-            <Route path='/' element={<ProtectedRoute />}>
-              <Route index element={<Dashboard />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/claims' element={<ClaimsList />} />
+              <Route path='/claims/:id' element={<ClaimsDetail />} />
             </Route>
             <Route path='/login' element={<Login />} />
             <Route path='register' element={<Register />} />
