@@ -127,14 +127,26 @@ router.get("/", listQueryValidation, handleValidationErrors, async (req: Request
         const skip = (page - 1) * limit;
 
         const currentUserId = (req as any).user._id;
-        const filter: any = { assignedTo: currentUserId };
+        const currentUserRole = (req as any).user.role;
+        
+        const filter: any = {};
+
+        // If not admin, only show claims assigned to current user
+        if (currentUserRole !== "admin") {
+            filter.assignedTo = currentUserId;
+            console.log('Not admin - applying assignedTo filter');
+        } else {
+            console.log('User is admin - showing all claims');
+        }
 
         if (status) filter.status = status;
         if (policy) filter.policy = policy;
 
-        // Keep scoped to authenticated user unless explicitly filtering self.
-        if (assignedTo && String(assignedTo) === String(currentUserId)) {
-            filter.assignedTo = assignedTo;
+        // Keep scoped to authenticated user unless explicitly filtering self, or is admin
+        if (assignedTo) {
+            if (currentUserRole === "admin" || String(assignedTo) === String(currentUserId)) {
+                filter.assignedTo = assignedTo;
+            }
         }
 
         // in search filter, remove title (not in schema)
@@ -146,6 +158,8 @@ router.get("/", listQueryValidation, handleValidationErrors, async (req: Request
             ];
         }
 
+        console.log('Final filter:', JSON.stringify(filter));
+
         const [claims, total] = await Promise.all([
             Claim.find(filter)
                 .populate("policy")
@@ -155,6 +169,8 @@ router.get("/", listQueryValidation, handleValidationErrors, async (req: Request
                 .limit(limit),
             Claim.countDocuments(filter),
         ]);
+
+        console.log('Claims found:', claims.length, 'Total:', total);
 
         return res.status(200).json({
             data: claims,
@@ -166,6 +182,7 @@ router.get("/", listQueryValidation, handleValidationErrors, async (req: Request
             },
         });
     } catch (error) {
+        console.error('Error in GET /claims:', error);
         return res.status(500).json({ message: "Failed to fetch claims" });
     }
 });
@@ -173,16 +190,19 @@ router.get("/", listQueryValidation, handleValidationErrors, async (req: Request
 // GET /api/claims/stats - Aggregated claim statistics
 router.get("/stats", async (req: Request, res: Response) => {
     try {
+        const currentUserRole = (req as any).user.role;
         const currentUserId = new ObjectId(String((req as any).user._id));
+        
+        const matchStage: any = currentUserRole === "admin" ? {} : { assignedTo: currentUserId };
 
         const [byStatus, totals] = await Promise.all([
             Claim.aggregate<{ status: string; count: number }>([
-                { $match: { assignedTo: currentUserId } },
+                { $match: matchStage },
                 { $group: { _id: "$status", count: { $sum: 1 } } },
                 { $project: { _id: 0, status: "$_id", count: 1 } },
             ]),
             Claim.aggregate<{ totalClaims: number; totalClaimAmount: number }>([
-                { $match: { assignedTo: currentUserId } },
+                { $match: matchStage },
                 {
                     $group: {
                         _id: null,
@@ -207,10 +227,17 @@ router.get("/stats", async (req: Request, res: Response) => {
 // GET /api/claims/:id - Get single claim by ID
 router.get("/:id", idValidation, handleValidationErrors, async (req: Request, res: Response) => {
     try {
-        const claim = await Claim.findOne({
-            _id: req.params.id,
-            assignedTo: (req as any).user._id,
-        })
+        const currentUserId = (req as any).user._id;
+        const currentUserRole = (req as any).user.role;
+        
+        const filter: any = { _id: req.params.id };
+        
+        // If not admin, only allow viewing own claims
+        if (currentUserRole !== "admin") {
+            filter.assignedTo = currentUserId;
+        }
+
+        const claim = await Claim.findOne(filter)
             .populate("policy")
             .populate("assignedTo", "-password");
 

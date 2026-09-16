@@ -5,6 +5,7 @@ import Register from './pages/Register'
 import NotFound from './pages/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
 import Dashboard from './pages/Dashboard'
+import ClaimsList from './pages/ClaimsList'
 import './App.css'
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Routes>
             <Route path='/' element={<ProtectedRoute />}>
               <Route index element={<Dashboard />} />
+              <Route path='/claims' element={<ClaimsList />} />
             </Route>
             <Route path='/login' element={<Login />} />
             <Route path='register' element={<Register />} />

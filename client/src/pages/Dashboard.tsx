@@ -98,7 +98,7 @@ function Dashboard() {
 
         {claimsByStatus.map((item) => {
           const maxCount = Math.max(...claimsByStatus.map((s) => s.count), 1)
-          const barWidth = `${(item.count / maxCount) * 100 }%`
+          const barWidth = `${(item.count / maxCount) * 50}%`
 
           return (
             <div
