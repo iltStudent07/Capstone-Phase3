@@ -1,0 +1,83 @@
+export type User = {
+    _id:string
+    name: string
+    email: string
+    role: string
+}
+
+export type Note = {
+    text: string
+    createdAt: string
+    createdBy?: User | string | null
+}
+
+export type Policy = {
+    _id: string
+    policyNumber: string
+    holderName: string
+    type: string
+    premium: number
+    status: string
+    effectiveDate: string
+    expriationDate: string
+}
+
+export type Claim = {
+    _id: string
+    claimNumber: string
+    policy: string | Pick<Policy, '_id' | 'policyNumber' | 'holderName'>
+    description: string
+    incidentDate: string
+    amount: number
+    status: string
+    assignedTo: string | User
+    notes: Note[]
+    createdAt?: string
+    updatedAt?: string
+}
+
+export type RecentClaim = {
+    _id: string
+    claimNumber: string
+    policy: {
+        _id: string
+        policyNumber: string
+    }
+    amount: number
+    status: string
+}
+
+export type DashboardStats = {
+    totalClaims: number
+    claimsByStatus:
+        | {
+            underReview: number
+            approved: number
+            submitted: number
+            denied: number
+            closed: number
+        }
+        | {
+            status: string
+            count: number
+        }[]
+    totalPolicies: number
+    policiesByType: number
+    totalUsers: number
+    recentClaims: RecentClaim[]
+    totalClaimAmount: number
+}
+
+export type AuthContextValue = {
+  user: User | null;
+  token: string | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    role: string,
+  ) => Promise<void>;
+  logout: () => void;
+};
