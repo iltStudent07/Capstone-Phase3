@@ -98,7 +98,18 @@ router.get("/", listQueryValidation, handleValidationErrors, async (req: Request
         const limit = Number(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        const filter: any = { owner: (req as any).user._id };
+        const currentUserId = (req as any).user._id;
+        const currentUserRole = (req as any).user.role;
+
+        const filter: any = {};
+
+        // If not admin, only show policies assigned to current user
+        if (currentUserRole !== "admin") {
+            filter.owner = currentUserId;
+            console.log('Not admin - applying owner filter');
+        } else {
+            console.log('User is admin - showing all policies');
+        }
 
         if (type) filter.type = type;
         if (status) filter.status = status;
@@ -111,10 +122,14 @@ router.get("/", listQueryValidation, handleValidationErrors, async (req: Request
             ];
         }
 
+        console.log('Final filter:', JSON.stringify(filter));
+
         const [policies, total] = await Promise.all([
             Policy.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
             Policy.countDocuments(filter),
         ]);
+
+        console.log('Policies found:', policies.length, 'Total:', total, 'Page:', page, 'Limit:', limit);
 
         res.status(200).json({
             data: policies,
@@ -133,10 +148,16 @@ router.get("/", listQueryValidation, handleValidationErrors, async (req: Request
 // GET /api/policies/:id - Get single policy by ID (populate owner info)
 router.get("/:id", idValidation, handleValidationErrors, async (req: Request, res: Response) => {
     try {
-        const policy = await Policy.findOne({
-            _id: req.params.id,
-            owner: (req as any).user._id,
-        }).populate("owner", "-password");
+        const currentUserId = (req as any).user._id;
+        const currentUserRole = (req as any).user.role;
+
+        const filter: any = { _id: req.params.id };
+
+        if (currentUserRole !== "admin") {
+            filter.owner = currentUserId;
+        }
+
+        const policy = await Policy.findOne(filter).populate("owner", "-password");
 
         if (!policy) {
             return res.status(404).json({ message: "Policy not found" });
@@ -176,9 +197,17 @@ router.put(
     async (req: Request, res: Response) => {
         try {
             const { policyNumber: _policyNumber, ...updates } = req.body;
+            const currentUserId = (req as any).user._id;
+            const currentUserRole = (req as any).user.role;
+
+            const filter: any = { _id: req.params.id };
+
+            if (currentUserRole !== "admin") {
+                filter.owner = currentUserId;
+            }
 
             const updated = await Policy.findOneAndUpdate(
-                { _id: req.params.id, owner: (req as any).user._id },
+                filter,
                 updates,
                 { new: true, runValidators: true }
             );
@@ -200,10 +229,16 @@ router.put(
 // DELETE /api/policies/:id - Delete policy
 router.delete("/:id", idValidation, handleValidationErrors, async (req: Request, res: Response) => {
     try {
-        const deleted = await Policy.findOneAndDelete({
-            _id: req.params.id,
-            owner: (req as any).user._id,
-        });
+        const currentUserId = (req as any).user._id;
+        const currentUserRole = (req as any).user.role;
+
+        const filter: any = { _id: req.params.id };
+
+        if (currentUserRole !== "admin") {
+            filter.owner = currentUserId;
+        }
+
+        const deleted = await Policy.findOneAndDelete(filter);
 
         if (!deleted) {
             return res.status(404).json({ message: "Policy not found" });
