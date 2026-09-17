@@ -1,5 +1,5 @@
 import { AuthProvider } from './context/AuthContext'
-import { Routes, Route } from 'react-router-dom'
+import { Navigate, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import NotFound from './pages/NotFound'
@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard'
 import ClaimsList from './pages/ClaimsList'
 import ClaimsDetail from './pages/ClaimsDetail'
 import Policy from './pages/Policy'
+import PolicyDetail from './pages/PolicyDetail'
 import './App.css'
 
 function App() {
@@ -18,11 +19,13 @@ function App() {
       <AuthProvider>
         <main>
           <Routes>
-            <Route element={<ProtectedRoute />}>
-              <Route path='/dashboard' element={<Dashboard />} />
-              <Route path='/claims' element={<ClaimsList />} />
-              <Route path='/claims/:id' element={<ClaimsDetail />} />
-              <Route path='/policies' element={<Policy />} />
+            <Route path='/' element={<ProtectedRoute />}>
+              <Route index element={<Navigate to='/dashboard' replace />} />
+              <Route path='dashboard' element={<Dashboard />} />
+              <Route path='claims' element={<ClaimsList />} />
+              <Route path='claims/:id' element={<ClaimsDetail />} />
+              <Route path='policies' element={<Policy />} />
+              <Route path='policies/:id' element={<PolicyDetail />} />
             </Route>
             <Route path='/login' element={<Login />} />
             <Route path='register' element={<Register />} />

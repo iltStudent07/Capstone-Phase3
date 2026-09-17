@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import api from '../services/api'
 import type { Policy as PolicyType } from '../types/types'
+import { Link } from 'react-router-dom'
 
 interface PaginationData {
     page: number
@@ -347,7 +348,7 @@ function Policy() {
                                 {policies.length > 0 ? (
                                     policies.map((policy) => (
                                         <tr key={policy._id}>
-                                            <td>{policy.policyNumber}</td>
+                                            <td><Link className="claim-link" to={`/policies/${policy._id}`}>{policy.policyNumber}</Link></td>
                                             <td>{policy.holderName}</td>
                                             <td className="policy-type">{policy.type || '—'}</td>
                                             <td>{formatCurrency(policy.premium)}</td>

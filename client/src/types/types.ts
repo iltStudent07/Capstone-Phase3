@@ -20,6 +20,7 @@ export type Policy = {
     status: string
     effectiveDate: string
     expriationDate: string
+    owner?: string | User | null
 }
 
 export type Claim = {

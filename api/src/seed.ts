@@ -1,9 +1,9 @@
 import dotenv from 'dotenv';
-import User from './models/User';
-import Policy from './models/Policy';
-import Claim from './models/Claim';
-import Counter from './models/Counter';
-import connectDB from './config/db';
+import User from './models/User.js';
+import Policy from './models/Policy.js';
+import Claim from './models/Claim.js';
+import Counter from './models/Counter.js';
+import connectDB from './config/db.js';
 
 
 dotenv.config();
