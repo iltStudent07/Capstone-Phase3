@@ -9,7 +9,10 @@ function Navbar() {
 
   return (
     <div>
+      
        <nav className="navbar">
+            
+            <span className={"navbar-logo status-pill"}>&#127757;   Policy Claims Tracker</span>
             <div className="navbar__links">
               <NavLink to="/dashboard" className={linkClassName}>Dashboard</NavLink>
               <NavLink to="/claims" className={linkClassName}>Claims</NavLink>
@@ -26,8 +29,6 @@ function Navbar() {
               <button onClick={logout} className="app-button navbar__logout">Logout</button>
             </div>
         </nav>
-
-        
     </div>
     
   );

@@ -175,6 +175,10 @@ main {
     color: white;
 }
 
+.navbar-logo {
+	font-size: 25px;
+}
+
 /* Auth pages */
 .auth-page {
 	min-height: calc(100vh - 72px);
