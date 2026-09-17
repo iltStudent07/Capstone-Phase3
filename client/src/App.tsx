@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard'
 import ClaimsList from './pages/ClaimsList'
 import ClaimsDetail from './pages/ClaimsDetail'
 import Policy from './pages/Policy'
+import PolicyDetail from './pages/PolicyDetail'
 import './App.css'
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
               <Route path='claims' element={<ClaimsList />} />
               <Route path='claims/:id' element={<ClaimsDetail />} />
               <Route path='policies' element={<Policy />} />
+              <Route path='policies/:id' element={<PolicyDetail />} />
             </Route>
             <Route path='/login' element={<Login />} />
             <Route path='register' element={<Register />} />
