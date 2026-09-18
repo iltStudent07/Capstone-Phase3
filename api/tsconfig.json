@@ -6,7 +6,8 @@
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["vitest/globals"]
   },
   "include": ["server.ts", "src/**/*.ts"],
   "exclude": ["dist", "node_modules"]
