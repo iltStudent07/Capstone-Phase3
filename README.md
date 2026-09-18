@@ -4,6 +4,8 @@ This repo is for demonstrating my knowledge and skills with Node.js, Express, Mo
 
 ## Architecture Overview
 
+[Architecture Documentation](ARCHITECTURE.md)
+
 ## Quick-Start Instructions (Docker Compose)
 
 Use Docker Compose for the fastest way to run the full stack locally. This starts MongoDB, the Express API, and the React client together with the correct internal networking already configured.
