@@ -238,3 +238,7 @@ Protected routes expect an `Authorization: Bearer <token>` header.
 - Docker Compose provides a quick way to run MongoDB, the API, and the client together.
 - A separate production Compose file adds the SSL-enabled Nginx setup.
 - Kubernetes manifests and Kind support local cluster-based deployment for the same multi-service stack.
+
+## Repo Author
+
+iltStudent07

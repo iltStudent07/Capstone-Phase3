@@ -210,7 +210,7 @@ router.put(
                 filter,
                 updates,
                 { new: true, runValidators: true }
-            );
+            ).populate("owner", "-password");
 
             if (!updated) {
                 return res.status(404).json({ message: "Policy not found" });
